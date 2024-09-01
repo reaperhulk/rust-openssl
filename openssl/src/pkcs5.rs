@@ -9,6 +9,7 @@ use crate::error::ErrorStack;
 use crate::hash::MessageDigest;
 #[cfg(not(boringssl))]
 use crate::symm::Cipher;
+use foreign_types::ForeignType;
 use openssl_macros::corresponds;
 
 #[derive(Clone, Eq, PartialEq, Hash, Debug)]
@@ -92,7 +93,7 @@ pub fn pbkdf2_hmac(
     pass: &[u8],
     salt: &[u8],
     iter: usize,
-    hash: MessageDigest,
+    hash: impl Into<crate::md::Md>,
     key: &mut [u8],
 ) -> Result<(), ErrorStack> {
     unsafe {
@@ -103,7 +104,7 @@ pub fn pbkdf2_hmac(
             salt.as_ptr(),
             salt.len().try_into().unwrap(),
             iter.try_into().unwrap(),
-            hash.as_ptr(),
+            hash.into().as_ptr(),
             key.len().try_into().unwrap(),
             key.as_mut_ptr(),
         ))

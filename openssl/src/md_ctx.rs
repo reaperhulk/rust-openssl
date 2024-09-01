@@ -123,6 +123,18 @@ impl MdCtx {
     }
 }
 
+impl Clone for MdCtx {
+    fn clone(&self) -> MdCtx {
+        unsafe {
+            let ptr = EVP_MD_CTX_new();
+            assert!(!ptr.is_null());
+            let r = ffi::EVP_MD_CTX_copy_ex(ptr, self.as_ptr());
+            assert_eq!(r, 1);
+            MdCtx::from_ptr(ptr)
+        }
+    }
+}
+
 impl MdCtxRef {
     /// Initializes the context to compute the digest of data.
     #[corresponds(EVP_DigestInit_ex)]
