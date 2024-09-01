@@ -199,6 +199,18 @@ impl Md {
     pub fn sm3() -> &'static MdRef {
         unsafe { MdRef::from_ptr(ffi::EVP_sm3() as *mut _) }
     }
+
+    #[cfg(all(any(ossl110, boringssl), not(osslconf = "OPENSSL_NO_BLAKE2")))]
+    #[inline]
+    pub fn blake2b512() -> &'static MdRef {
+        unsafe { MdRef::from_ptr(ffi::EVP_blake2b512() as *mut _) }
+    }
+
+    #[cfg(all(any(ossl110, boringssl), not(osslconf = "OPENSSL_NO_BLAKE2")))]
+    #[inline]
+    pub fn blake2s256() -> &'static MdRef {
+        unsafe { MdRef::from_ptr(ffi::EVP_blake2s256() as *mut _) }
+    }
 }
 
 /// A reference to an [`Md`].

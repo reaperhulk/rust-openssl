@@ -310,6 +310,10 @@ extern "C" {
     #[cfg(ossl111)]
     pub fn EVP_shake256() -> *const EVP_MD;
     pub fn EVP_ripemd160() -> *const EVP_MD;
+    #[cfg(all(any(ossl110, boringssl), not(osslconf = "OPENSSL_NO_BLAKE2")))]
+    pub fn EVP_blake2b512() -> *const EVP_MD;
+    #[cfg(all(any(ossl110, boringssl), not(osslconf = "OPENSSL_NO_BLAKE2")))]
+    pub fn EVP_blake2s256() -> *const EVP_MD;
     #[cfg(all(any(ossl111, libressl291), not(osslconf = "OPENSSL_NO_SM3")))]
     pub fn EVP_sm3() -> *const EVP_MD;
     pub fn EVP_des_ecb() -> *const EVP_CIPHER;
